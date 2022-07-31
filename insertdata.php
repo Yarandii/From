@@ -1,5 +1,5 @@
 <?php
- session_start();
+ //session_start();
 
 $servername = "localhost";
 $username = "yarandi";
@@ -52,32 +52,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $_SESSION['phone'] = "InValid Phone Number";
   }
   else unset($_SESSION['phone']);
+  unset($_SESSION['msg']);
 
  if(isset($_SESSION) && !empty($_SESSION)){
-  //die(print_r($_SESSION));
     header('location:add.php');
     exit;
+  }else{
+    
+    $firstName = $_POST['first_name'];
+    $surName= $_POST['sur_name'];
+    $email = $_POST['eamil'];
+    $phone = $_POST['phone'];
+
+    $sql = "INSERT INTO list (first_name, sur_name, email, phone) VALUES ('$firstName', '$surName', '$email', '$phone')";
+    
+    if ($conn->query($sql) === TRUE){
+      $_SESSION['msg']="New record created successfuly";
+       header('location: add.php');
+       exit;
+  
+    }else{
+      echo "Error: " . $sql . "<br>" . $conn->error;
+  
+    }
   }
-
- 
-
- if(!$_SESSION){
-  $sql = "INSERT INTO list (first_name, sur_name, email, phone) VALUES ('$firstName', '$surName', '$email', '$phone')";
-  if ($conn->query($sql) === TRUE){
-    $_SESSION['msg']="New record created successfuly";
-     header('location: add.php');
-     exit;
-  }
-  else{
-    echo "Error: " . $sql . "<br>" . $conn->error;
-
-  }
-}
-
 
 $conn->close();
-}
-session_destroy(); 
+} 
+
 ?>
 
 
