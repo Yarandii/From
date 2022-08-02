@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
   else unset($_SESSION['sur_name']);
 
-  // $email = $_POST["email"];
+   $email = $_POST["email"];
 
   $emailExistanceCheck = mysqli_query($conn, "SELECT * FROM list WHERE email = '$email'");
     
@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   else unset($_SESSION['email']);
   
 
-  // $phone = $_POST['phone'];
+   $phone = $_POST['phone'];
   $phoneExistanceCheck = mysqli_query($conn, "SELECT * FROM list WHERE phone = '$phone'");
 
   if (empty($_POST["phone"])) {
@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION['phone'] = "This phone address is already used!";
   }
   else unset($_SESSION['phone']);
-
+  unset($_SESSION['msg']);  
 
  if(isset($_SESSION) && !empty($_SESSION)){
     header('location:add.php');
