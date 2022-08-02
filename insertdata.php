@@ -35,35 +35,59 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
   else unset($_SESSION['sur_name']);
 
+  // $email = $_POST["email"];
 
+  $emailExistanceCheck = mysqli_query($conn, "SELECT * FROM list WHERE email = '$email'");
+    
   if (empty($_POST["email"])) {
     $_SESSION['email'] = "Email is required";
   }
   elseif(!filter_var($_POST["email"],FILTER_VALIDATE_EMAIL)){
     $_SESSION['email'] = "Invalid Email Format";
+  }elseif(mysqli_num_rows($emailExistanceCheck)){
+    $_SESSION['email'] = "This email address is already used!";
   }
   else unset($_SESSION['email']);
   
+
+  // $phone = $_POST['phone'];
+  $phoneExistanceCheck = mysqli_query($conn, "SELECT * FROM list WHERE phone = '$phone'");
 
   if (empty($_POST["phone"])) {
     $_SESSION['phone'] = "Phone is required ";
   } 
   elseif(!preg_match("/^[0-9]{11}+$/",$_POST["phone"])) {
       $_SESSION['phone'] = "InValid Phone Number";
+
+  }elseif(mysqli_num_rows($phoneExistanceCheck)){
+    $_SESSION['phone'] = "This phone address is already used!";
   }
   else unset($_SESSION['phone']);
-  unset($_SESSION['msg']);
+
 
  if(isset($_SESSION) && !empty($_SESSION)){
     header('location:add.php');
     exit;
   }else{
-    
+
     $firstName = $_POST['first_name'];
     $surName= $_POST['sur_name'];
-    $email = $_POST['eamil'];
+    $email = $_POST['email']; 
     $phone = $_POST['phone'];
 
+  
+
+       
+    // $_SESSION['email'] = "This email address is already used!";
+  
+    
+    // $select = mysqli_query($conn, "SELECT * FROM list WHERE phone = '".$_POST['phone']."'");
+    // if(mysqli_num_rows($select)) {
+    //  exit('This phone number is already used!');
+    // }    //  $_SESSION['phone'] = "This phone number is already used!";
+
+    
+        
     $sql = "INSERT INTO list (first_name, sur_name, email, phone) VALUES ('$firstName', '$surName', '$email', '$phone')";
     
     if ($conn->query($sql) === TRUE){
